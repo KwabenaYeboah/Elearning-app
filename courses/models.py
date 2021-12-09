@@ -76,7 +76,7 @@ class File(ContentBase):
 class Image(ContentBase):
     file = models.FileField(upload_to='images')
 
-class Vide(ContentBase):
+class Video(ContentBase):
     url = models.URLField()
     
     
