@@ -1,3 +1,4 @@
+from braces.views import CsrfExemptMixin, JsonRequestResponseMixin
 from django.shortcuts import render,redirect,get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic.base import View, TemplateResponseMixin
@@ -128,4 +129,16 @@ class ModuleContentListView(TemplateResponseMixin, View):
         module = get_object_or_404 (Module, id=module_id,
                                     course__instructor=request.user)
         return self.render_to_response({'module': module})
+
+class ModuleOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Module.objects.filter(id=id, course__instructor=request.user).update(order=order)
+        return self.render_json_response({'saved':'OK'})
+    
+class ContentOrderView(CsrfExemptMixin, JsonRequestResponseMixin, View):
+    def post(self, request):
+        for id, order in self.request_json.items():
+            Content.objects.filter(id=id, module__course__instructor=request.user).update(order=order)
+        return self.render_json_response({'saved':'OK'})
     
