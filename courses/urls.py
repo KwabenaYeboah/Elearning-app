@@ -1,13 +1,16 @@
 from django.urls import path
 
-from .views import (CourseListView, CourseCreateView, 
+from .views import (InstructorCourseListView, CourseCreateView, 
                     CourseUpdateView, CourseDeleteView,
                     CourseModuleUpdateView, ContentCreateUpdateView,
                     ContentDeleteView, ModuleContentListView,
-                    ModuleOrderView, ContentOrderView)
+                    ModuleOrderView, ContentOrderView,
+                    CourseListView, CourseDetailView)
 
 urlpatterns = [
-    path('all-courses/', CourseListView.as_view(), name='course_list'),
+    path('subject/<slug:subject>/', CourseListView.as_view(), name='course_list_subject'),
+    path('detail/<slug:slug>/', CourseDetailView.as_view(), name='course_detail'), 
+    path('all-courses/', InstructorCourseListView.as_view(), name='course_list'),
     path('create/', CourseCreateView.as_view(), name='course_create'),
     path('<pk>/update/', CourseUpdateView.as_view(), name='course_update'),
     path('<pk>/delete/', CourseDeleteView.as_view(), name='course_delete'),
@@ -20,4 +23,5 @@ urlpatterns = [
     path('module/<int:module_id>/', ModuleContentListView.as_view(), name='module_content_list'),
     path('module/order/', ModuleOrderView.as_view(), name='module_order'),
     path('content/order/', ContentOrderView.as_view(), name='content_order'),
+    
 ]
