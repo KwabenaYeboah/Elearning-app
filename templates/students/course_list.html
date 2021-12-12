@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+
+{% block title %}My courses{% endblock %}
+
+{% block content %}
+  <h1>My courses</h1>
+
+  <div class="module">
+    {% for course in courses %}
+      <div class="course-info">
+        <h3>{{ course.title }}</h3>
+        <p><a href="{% url 'student_course_detail' course.id %}">
+        Access contents</a></p>
+      </div>
+    {% empty %}
+      <p>
+        
+        You are not enrolled in any courses yet.
+        <a href="{% url 'all_course_list' %}">Browse courses</a>
+        to enroll in a course.
+      </p>
+    {% endfor %}
+    {% if request.user.courses_created.all %}
+      <h1>For Course Instructors:
+        <a href="{% url 'course_list' %}" class="button">Access Your Course</a>
+      </h1>
+    {% endif %}
+  </div>
+{% endblock %}

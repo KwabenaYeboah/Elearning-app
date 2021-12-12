@@ -15,14 +15,17 @@
         <a href="{% url "course_list_subject" subject.slug %}">
         {{ subject.title }}</a>.
         {{ course.modules.count }} modules.
-        Instructor: {{ course.instrutor.get_full_name }}
+        Instructor: {{ course.instructor.get_full_name }}
       </p>
       {{ course.overview|linebreaks }}
-      {% if request.user.is_authenticated %}
+      {% if request.user.is_authenticated and request.user in course.students.all %}
+        <h2>You have Enrolled in "{{ course.title }}"</h2>
+        <a href="{% url 'student_course_detail' course.id%}" class="button">Access course content</a>
+      {% elif request.user.is_authenticated %}
         <form action="{% url 'student_enroll_course' %}" method="post">
           {% csrf_token %}
           {{ enroll_form }}
-          <input type="submit" value="Enroll">
+          <input type="submit" value="Enroll Now">
         </form>
       {% else %}
         <a href="{% url 'student_signup' %}" class="button">
