@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'embed_video',
     'memcache_status',
     'rest_framework',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,6 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ]
 }
+
+# Channel config 
+ASGI_APPLICATION = 'mysite.routing.application'
