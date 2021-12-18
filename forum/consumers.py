@@ -1,9 +1,11 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
+from django.utils import timezone 
 
 class ForumConsumer(WebsocketConsumer):
     def connect(self):
+        self.user = self.scope['user']
         self.id = self.scope['url_route']['kwargs']['course_id']
         self.course_forum_name = 'course_forum_%s' % self.id
         # join course forum
@@ -21,9 +23,13 @@ class ForumConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+        now = timezone.now()
         # send message to course forum
         async_to_sync(self.channel_layer.group_send)(
-            self.course_forum_name, {'type':'chat_message', 'message':message}
+            self.course_forum_name, {'type':'chat_message', 
+                                     'message':message,
+                                     'user':self.user.username,
+                                     'datetime':now.isoformat()}
         )
     
     # Receive message from course forum
