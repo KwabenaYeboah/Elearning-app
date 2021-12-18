@@ -26,6 +26,9 @@
         <li>No modules yet.</li>
       {% endfor %}
     </ul>
+      <h3>
+      <a href="{% url 'course_forum' object.id %}">Course Forum</a>
+      </h3>
   </div>
   <div class="module">
     {% cache 300 module_contents module %}
